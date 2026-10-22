@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moje Wyniki Piłkarskie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #1e3d59;
+            color: white;
+            text-align: center;
+            padding: 25px 0 15px 0;
+        }
+        
+        /* PASEK NAWIGACJI */
+        nav {
+            background-color: #173046;
+            display: flex;
+            justify-content: center;
+            padding: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        nav button {
+            background: none;
+            border: none;
+            color: #b0c4de;
+            padding: 8px 20px;
+            margin: 0 10px;
+            font-weight: bold;
+            font-size: 0.95em;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        nav button:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        nav button.active {
+            color: white;
+            background-color: #ff6e40;
+        }
+        
+        /* NAPRAWIONE LOGOTYPY - IKONY CSS */
+        .icon {
+            width: 24px;
+            height: 24px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            display: inline-block;
+        }
+        
+        /* Wbudowane grafiki z przesłanych obrazków */
+        .icon-ucl {
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAADGklEQVR4nO2YTUgUURTH//+ZndnVbXfNctMstSgMetAsIkiisCDoRxBS9GshdBDoEuhU9F06BB06ZAdZByM6GFER9SDoYbaalS2bu667szvfmZ0OLbaZ6667bof5w8C89+b9eO+999598B8beIuSUpIkSdL/ThYAIAnAnAAfAEg7YIUkpSTpT+R4NlBKSc6AswBywEw6Z0V8G6gqYInzNuOclYIeSDoCHAVw3gErBclGZ68wFwO4XwK6Oes58FwD+CRAywDuO6AVwH0H6ALw0AFGgVfOwXgZgD6gOQOunvOat8CVAXoOEDOALwN8BcA/AsQpALsBvFwBvT0F5BqAFIDvV8CgDkCfU0CgD+A6gBsAvlsBwwYAbeA6gJsAxlwDywA4C3AeQLYChgAAmgLwZQDfDdBfXAO/AVwGcAsANAXgCQA3AdD3wDTAFwGgCQA/XoHBbwDuAngAgKYA/AjAsQA6DWC4An0DAEYBPAigv8w70AfgbgX6bQAwDOBBAH2ZAlpWAaAJAEMAGgH0ZQrIUgAIp6A8AGAMwEMXoL2WAnIq7wAdADAGoBVAWyagvZYpIEcDvF9BWT2AtkxBOQUgZAF9NIDbAnBLpIDwHwE4C6AtAOwHQCwFpAoAbgGAtgBsDoDoAnCvBHQzANoCgN4A0MwA0BaAnAnAVgCwH8C2AGQLwKwD7CsAnAbwDkBvADAnBThfAnodwFwAsBcA66uAfS6AvAbAGICXAFoCwB4AsC6AvKMC8t6b16wDoD8A6FfXvF49wNsK8CcA5gSA/QCInes662+AnKMC9AnAkwDeO6BfF8AnAMwpgO8A4CGAXgD9rgEAmAXQAOC9A970LOBvB8AtAHIcgKYA3AfwGQCvA8DeGvC/AGAPAOZpALcAvHQA/6mAdApgZgH6DYAJp99Y6f8p4KsA9EwB/ToAtAGg9w7w3BvInXIAvABIAuBlwDkA0nUAMAlwFkA2AOZtAOnwVpIkSfpf+QuHIn8l9bL+HAAAAABJRU5ErkJggg==');
+        }
+        
+        .icon-laliga {
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC80lEQVR4nO2Yv2sUQRTHv7M7u7f3bby7v7v0j6SwsbYQLC0UbXwWIv6gIIiChYgIloIWYmUhgqCgIHYWKoKChYV/gY2FhaWFhaWFhaWFEZ8IuXvXm9nbWeZtMrfL7V0Sby/kDwZ23m92P97MvHkzG5AIEUFEfmeSAoArKSUAySklYV8pKSXyO0P+Tf8CgBsAXgHYDmA3gO0ANv0jE/kbwBsAbwCcD+D8KOD7AF4BeA7gM0b8b8DvADwE8BjAxVGA8A7ALICXAF4AeAnAo8v9ZpT+LwCgDeAZgOcA7ofX3D7r6XwZfnc9fO0eXpP7/wUAOgBeA3gO4GEYfBwA+By+/pDxehLAmYwBPAfwFMD96A3g6wDAnwHwXRhgHwYwAmAwfB0C+CoArAG4GgDoRHwAgG8CwA8BwA8AsAbgaYyX1gHwUwDgYgDgaQDgaQDgVwCwDuBGDODwH3vC9BkA9gE8igFsRAAOHwD2ALxKABz9B/A8AnAUANgD8CoWcHQA2APwOgZwZADY8wGw6AOgeXGbygHwNgBwKgdwXgXAtRUAeYgHwMsVAM4A3FcB8GsZgIcqAO6XAXisAmAbgJsCwK5N8Vb76v7X9wA4COBwNMDm8L1rA7D2N4CnAF4BeBrv1+I9pL0WpAAsAngeuub6APALwBsAt0PXXG/+N98DwHUAZ6NrvpPveSOfLgBwO7rnf/g15fV1uK/vK+/H98t9Xz/E+eX5/gVwFsDxEMC++Nq19wA4DODqCH4D8S36U9H9Yf606H8q9k/9Y0+YfT98b5m/p8w/FP8T+bXov2b+bW6fNreP93pSAnAmfO8Zt4/z5v7/bZ8DMCp+6PZpXvsN7r+Bvof96fbnuf9M9lO3p3X9Z7P/2uxf2v7C/f1U9i/t0zZ/U7fnbV/62xH87z9pUvYvbc7b5/Yvt99u36H/n8ifOQOQf6R/AUAyTsoA9pWSAuwrJUXkd8b+WwAASO4GAKSkYIdKSYndNSIi8idD/kwA/7WfGv09vNbyqAAAAABJRU5ErkJggg==');
+        }
+        
+        .icon-ekstraklasa {
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAADH0lEQVR4nO2YvWsUQRTAf7M7t3d3t5f78yRREfSDoI2lhWChpYViZWFhYWlhYWGhpYWlhaWFRbS0UFT0v8FC0EIEBUEULQQRLCwsLCwE0UvubvdmZ3eZt6vMZbe7S+LthfzBwM77ze7Hm5m3b2ZDJFmWyf8Z+Z2RDgAnA0g6gOygA8iZLJOfEem/6F8B6ACeAtgeQNIB7OhfMcmvAJ4DuAtgSgC3RwCvA3gE4BGAlx7xfwEvAXQD+ApgUgC3RQCvAngK4LUDuOnR+Tz86wR8H9TpxXGfGfnfFYAOwF0ArwDcGgW86gXwdgBfDsc96NFrXv4XAFAHcAvAKwDXRgGv+AEcDeB178t9Z+L/WwCoArgK4C2A66OAdwMAHQBfA3gfADgTwFMBwO0Anu2AofmIzwFwOwBwMwBwOwDwOADwMoC3vS/PAnAnAHA9AHA9AHAzAPAmgLc9XlcB4H4A4GMA4GMA4HEAoALgpR/goTf2hOkLAJQAfOwHeDwCUDgA+AygD+BxAnAEA8AfAPY6AIsAgD8AbHcAlo0AOAYAG/0AmfTBUb0+XAcAzgDAmg9gbAnAlw6A4wDGuwDuAODlZgB3AwCvZgA/GgHcDgAc7gEcbwbwZwbApg9gbgbwVwHgew/gS79X77f3/jGAlwAmBwE8CeB6AOA7AKY8AL4CcBnAqwC+BQD+BLDTAfACwBUPwK8Azo/A7wVAnwdA9+g3PfrfV3mfn+/z853B367v7wB4GMDpEMCpfq+G/A+ARwCO9gO8HjZ96T6/tH0Z/2vovTf8bOn6pf+q67XgvyL+y+D/SreWwS+5P91fDvep+K/E/6b769T9teI/Mfc3/f+p2b/rvyXvFfNfMf81t5fcr7r/VPwT7i/yv2D+6+6fdr/B/Zfuf83/jfm/Mv9Z96faf677S9tXuj+V/0vuf9X+S9vLtz/Zfsr/kXzKvgGQdAA6gOygA8gZ2UEi/TfkTxsAACSLA0gygLqfDSRE/GfInxgA/+VPAf8u0PZ18rMAAAAASUVORK5CYII=');
+        }
+        
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 10px;
+        }
+        .liga-section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 15px;
+            display: none; 
+        }
+        .liga-section.active-section {
+            display: block;
+        }
+
+        h2 {
+            color: #1e3d59;
+            border-bottom: 2px solid #ff6e40;
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>⚽ Najświeższe Wyniki Meczów</h1>
+        <p style="margin: 5px 0 0 0; opacity: 0.8;">Aktualne rezultaty i zakończone spotkania</p>
+    </header>
+
+    <!-- POPRAWIONE MENU - BEZ ZEWNĘTRZNYCH LINKÓW -->
+    <nav>
+        <button class="tab-btn active" onclick="switchLiga('liga-mistrzow', this)">
+            <span class="icon icon-ucl"></span>
+            Liga Mistrzów
+        </button>
+        <button class="tab-btn" onclick="switchLiga('la-liga', this)">
+            <span class="icon icon-laliga"></span>
+            La Liga
+        </button>
+        <button class="tab-btn" onclick="switchLiga('ekstraklasa', this)">
+            <span class="icon icon-ekstraklasa"></span>
+            Ekstraklasa
+        </button>
+    </nav>
+
+    <main>
+        <!-- SEKCJA: LIGA MISTRZÓW -->
+        <div id="liga-mistrzow" class="liga-section active-section">
+            <h2>
+                <span class="icon icon-ucl" style="transform: scale(1.3);"></span>
+                Liga Mistrzów
+            </h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Gospodarze</th>
+                        <th>Wynik</th>
+                        <th>Goście</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Pusto -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SEKCJA: LA LIGA -->
+        <div id="la-liga" class="liga-section">
+            <h2>
+                <span class="icon icon-laliga" style="transform: scale(1.3);"></span>
+                La Liga
+            </h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Gospodarze</th>
+                        <th>Wynik</th>
+                        <th>Goście</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Pusto -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- SEKCJA: EKSTRAKLASA -->
+        <div id="ekstraklasa" class="liga-section">
+            <h2>
+                <span class="icon icon-ekstraklasa" style="transform: scale(1.3);"></span>
+                PKO BP Ekstraklasa
+            </h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Gospodarze</th>
+                        <th>Wynik</th>
+                        <th>Goście</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Pusto -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        function switchLiga(ligaId, clickedButton) {
+            const sections = document.querySelectorAll('.liga-section');
+            sections.forEach(section => {
+                section.classList.remove('active-section');
+            });
+
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(ligaId).classList.add('active-section');
+            clickedButton.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
